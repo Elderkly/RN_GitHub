@@ -65,4 +65,4 @@ const AppCreateStackNavigator = createSwitchNavigator({
   }
 })
 
-export const AppStackNavigator = createAppContainer(AppCreateStackNavigator)
+export const AppStackNavigaton = createAppContainer(AppCreateStackNavigator)
