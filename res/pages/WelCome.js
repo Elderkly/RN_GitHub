@@ -18,7 +18,12 @@ export default class App extends Component<Props> {
         time: this.state.time - 1
       })
       console.log(this.state.time)
-      if (this.state.time == 0) {
+      // if (this.state.time == 0) {
+      //       //   clearInterval(this.Interval)
+      //       //   navigation.navigate('TabBar')
+      //       // }
+      //  测试
+      if (this.state.time) {
         clearInterval(this.Interval)
         navigation.navigate('TabBar')
       }
