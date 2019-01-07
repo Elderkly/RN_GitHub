@@ -1,14 +1,21 @@
 
 import React, {Component} from 'react';
-import {Text, View,StyleSheet} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 
+import NavigationBar from '../common/js/NavigationBar'
 
 type Props = {};
 export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Home</Text>
+        <NavigationBar
+          title={'收藏'}
+          style={{
+            backgroundColor:'rgb(0,109,106)'
+          }}
+        />
+        <Text style={styles.welcome}>收藏</Text>
       </View>
     );
   }
@@ -17,9 +24,6 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   },
   welcome: {
     fontSize: 20,
