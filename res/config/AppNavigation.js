@@ -1,17 +1,20 @@
 
 import React, {Component} from 'react'
-import {StatusBar} from 'react-native';
+// import {StatusBar} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {createSwitchNavigator,createAppContainer } from 'react-navigation'
+import {createSwitchNavigator,createAppContainer,createStackNavigator } from 'react-navigation'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-
+//  配置页面
 import setup from '../pages/setup'
 import WelCome from '../pages/WelCome'
-
+//  一级页面
 import Hot from '../pages/Hot'
 import Trend from '../pages/Trend'
 import Collection from '../pages/Collection'
 import User from '../pages/User'
+//  二级页面
+import Hot_SetTab from '../pages/Hot-setTab'
+
 
 //  tabBar
 const AppTabBar = createMaterialBottomTabNavigator({
@@ -23,10 +26,10 @@ const AppTabBar = createMaterialBottomTabNavigator({
       tabBarIcon: ({ tintColor }) => (
         <Icon name='ios-flame' color={tintColor} size={24} />
       ),
-      tabBarOnPress:((e) => {
-        StatusBar.setBackgroundColor('rgb(101,24,244)')
-        e.navigation.navigate('Hot')
-      })
+      // tabBarOnPress:((e) => {
+      //   StatusBar.setBackgroundColor('rgb(101,24,244)')
+      //   e.navigation.navigate('Hot')
+      // })
     }
   },
   Trend: {
@@ -37,10 +40,10 @@ const AppTabBar = createMaterialBottomTabNavigator({
       tabBarIcon: ({ tintColor }) => (
         <Icon name='ios-podium' color={tintColor} size={24} />
       ),
-      tabBarOnPress:((e) => {
-        StatusBar.setBackgroundColor('rgb(31,101,255)')
-        e.navigation.navigate('Trend')
-      })
+      // tabBarOnPress:((e) => {
+      //   StatusBar.setBackgroundColor('rgb(31,101,255)')
+      //   e.navigation.navigate('Trend')
+      // })
     }
   },
   Collection: {
@@ -51,10 +54,10 @@ const AppTabBar = createMaterialBottomTabNavigator({
       tabBarIcon: ({ tintColor }) => (
         <Icon name='ios-cube' color={tintColor} size={24} />
       ),
-      tabBarOnPress:((e) => {
-        StatusBar.setBackgroundColor('rgb(0,109,106)')
-        e.navigation.navigate('Collection')
-      })
+      // tabBarOnPress:((e) => {
+      //   StatusBar.setBackgroundColor('rgb(0,109,106)')
+      //   e.navigation.navigate('Collection')
+      // })
     }
   },
   User: {
@@ -65,10 +68,10 @@ const AppTabBar = createMaterialBottomTabNavigator({
       tabBarIcon: ({ tintColor }) => (
         <Icon name='ios-person' color={tintColor} size={24} />
       ),
-      tabBarOnPress:((e) => {
-        StatusBar.setBackgroundColor('rgb(208,39,96)')
-        e.navigation.navigate('User')
-      })
+      // tabBarOnPress:((e) => {
+      //   StatusBar.setBackgroundColor('rgb(208,39,96)')
+      //   e.navigation.navigate('User')
+      // })
     }
   }
 },{
@@ -77,10 +80,25 @@ const AppTabBar = createMaterialBottomTabNavigator({
   inactiveTintColor: 'rgba(255,255,255,.5)',
   shifting: true, // 图标缩放效果
 })
-
-
+//  页面常规路由配置
+const AppCreateStackNavigator = createStackNavigator({
+  TabBar: {
+    screen: AppTabBar,
+    navigationOptions: {
+      header:null,
+    }
+  },
+  Hot_SetTab:{
+    screen: Hot_SetTab,
+    navigationOptions: {
+      header:null,
+    }
+  }
+},{
+  headerMode:'float'
+})
 //  初始化 createSwitchNavigator页面只显示一次
-const AppCreateStackNavigator = createSwitchNavigator({
+const AppCreateSwitchNavigator = createSwitchNavigator({
   setup:{
     screen:setup,
     navigationOptions:{
@@ -94,11 +112,11 @@ const AppCreateStackNavigator = createSwitchNavigator({
     }
   },
   TabBar:{
-    screen:AppTabBar,
+    screen:AppCreateStackNavigator,
     navigationOptions:{
       header:'热门'
     }
   }
 })
 
-export const AppStackNavigaton = createAppContainer(AppCreateStackNavigator)
+export const AppStackNavigaton = createAppContainer(AppCreateSwitchNavigator)

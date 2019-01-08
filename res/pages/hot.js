@@ -201,7 +201,7 @@ const MaterialTopTabNavigator = createAppContainer(createMaterialTopTabNavigator
 type Props = {};
 export default class App extends Component<Props> {
   render() {
-    StatusBar.setBackgroundColor('rgb(101,24,244)')
+    // StatusBar.setBackgroundColor('rgb(101,24,244)')
     return (
       <View style={styles.container}>
         <NavigationBar

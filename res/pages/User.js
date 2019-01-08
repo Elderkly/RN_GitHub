@@ -7,6 +7,7 @@ import NavigationBar from '../common/js/NavigationBar'
 type Props = {};
 export default class App extends Component<Props> {
   render() {
+    const {navigation} = this.props
     return (
       <View style={styles.container}>
         <NavigationBar
@@ -15,7 +16,12 @@ export default class App extends Component<Props> {
             backgroundColor:'rgb(208,39,96)'
           }}
         />
-        <Text style={styles.welcome}>我的</Text>
+        <Text>我的</Text>
+        <Text
+          onPress={() => {
+            navigation.navigate('Hot_SetTab')
+          }}
+        >自定义标签</Text>
       </View>
     );
   }
