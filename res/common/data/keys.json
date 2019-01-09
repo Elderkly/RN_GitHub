@@ -39,5 +39,15 @@
     "path": " react",
     "name": " React",
     "checked": true
+  },
+  {
+    "path": " vue",
+    "name": " Vue",
+    "checked": true
+  },
+  {
+    "path": " java",
+    "name": " Java",
+    "checked": true
   }
 ]

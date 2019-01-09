@@ -1,6 +1,5 @@
 
 import React, {Component} from 'react'
-// import {StatusBar} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {createSwitchNavigator,createAppContainer,createStackNavigator } from 'react-navigation'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
@@ -26,10 +25,10 @@ const AppTabBar = createMaterialBottomTabNavigator({
       tabBarIcon: ({ tintColor }) => (
         <Icon name='ios-flame' color={tintColor} size={24} />
       ),
-      // tabBarOnPress:((e) => {
-      //   StatusBar.setBackgroundColor('rgb(101,24,244)')
-      //   e.navigation.navigate('Hot')
-      // })
+      tabBarOnPress:((e) => {
+        // StatusBar.setBackgroundColor('rgb(101,24,244)')
+        e.navigation.navigate('Hot')
+      })
     }
   },
   Trend: {
