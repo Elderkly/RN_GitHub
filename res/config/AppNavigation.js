@@ -7,13 +7,13 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 import setup from '../pages/setup'
 import WelCome from '../pages/WelCome'
 //  一级页面
-import Hot from '../pages/Hot'
+import Hot from '../pages/hot'
 import Trend from '../pages/Trend'
 import Collection from '../pages/Collection'
 import User from '../pages/User'
 //  二级页面
 import Hot_SetTab from '../pages/Hot-setTab'
-
+import Hot_sortTab from '../pages/Hot-sortTab'
 
 //  tabBar
 const AppTabBar = createMaterialBottomTabNavigator({
@@ -23,7 +23,7 @@ const AppTabBar = createMaterialBottomTabNavigator({
       tabBarLabel: '热门',
       tabBarColor:'rgb(101,24,244)',
       tabBarIcon: ({ tintColor }) => (
-        <Icon name='ios-flame' color={tintColor} size={24} />
+          <Icon name='ios-flame' color={tintColor} size={24} />
       ),
       tabBarOnPress:((e) => {
         // StatusBar.setBackgroundColor('rgb(101,24,244)')
@@ -37,7 +37,7 @@ const AppTabBar = createMaterialBottomTabNavigator({
       tabBarLabel: '趋势',
       tabBarColor:'rgb(31,101,255)',
       tabBarIcon: ({ tintColor }) => (
-        <Icon name='ios-podium' color={tintColor} size={24} />
+          <Icon name='ios-podium' color={tintColor} size={24} />
       ),
       // tabBarOnPress:((e) => {
       //   StatusBar.setBackgroundColor('rgb(31,101,255)')
@@ -51,7 +51,7 @@ const AppTabBar = createMaterialBottomTabNavigator({
       tabBarLabel: '收藏',
       tabBarColor:'rgb(0,109,106)',
       tabBarIcon: ({ tintColor }) => (
-        <Icon name='ios-cube' color={tintColor} size={24} />
+          <Icon name='ios-cube' color={tintColor} size={24} />
       ),
       // tabBarOnPress:((e) => {
       //   StatusBar.setBackgroundColor('rgb(0,109,106)')
@@ -65,7 +65,7 @@ const AppTabBar = createMaterialBottomTabNavigator({
       tabBarLabel: '我的',
       tabBarColor:'rgb(208,39,96)',
       tabBarIcon: ({ tintColor }) => (
-        <Icon name='ios-person' color={tintColor} size={24} />
+          <Icon name='ios-person' color={tintColor} size={24} />
       ),
       // tabBarOnPress:((e) => {
       //   StatusBar.setBackgroundColor('rgb(208,39,96)')
@@ -91,6 +91,12 @@ const AppCreateStackNavigator = createStackNavigator({
     screen: Hot_SetTab,
     navigationOptions: {
       header:null,
+    }
+  },
+  Hot_sortTab:{
+    screen:Hot_sortTab,
+    navigationOptions: {
+      header:null
     }
   }
 },{

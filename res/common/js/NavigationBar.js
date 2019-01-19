@@ -2,20 +2,39 @@ import React,{Component} from 'react'
 import {
   View,
   Text,
-  Image,
   StatusBar,
-  StyleSheet, Platform
+  StyleSheet, Platform,Dimensions
 } from 'react-native';
 //  约束props
 import PropTypes from 'prop-types'
 
+// import DeviceInfo from 'react-native-device-info'
+
 const NAV_BAR_HEIGHT_ANDROID = 50; //  安卓下的高度
-const NAV_BAR_HEIGHT_IOS = 44;  //  IOS下的高度
+const NAV_BAR_HEIGHT_IOS =  44;  //  IOS下的高度
 const STATUS_BAR_HEIGHT = 20;
+
+// iPhoneX
+const X_WIDTH = 375;
+const X_HEIGHT = 812;
+
+const screenW = Dimensions.get('window').width;
+const screenH = Dimensions.get('window').height;
+
+
 const StatusBarShape = {
   backgroundColor:PropTypes.string, //状态栏颜色
   barStyle:PropTypes.oneOf(['default', 'light-content', 'dark-content']),  //状态栏文本颜色  oneOf() 通过枚举确保返回的props在特定的值范围内 在这里只返回括号内的三个值
-  hidden:PropTypes.bool,  //  状态栏是否隐藏
+  // hidden:PropTypes.bool,  //  状态栏是否隐藏
+  hidden:false
+}
+
+function isIphoneX() {
+  return (
+      Platform.OS === 'ios' &&
+      ((screenH === X_HEIGHT && screenW === X_WIDTH) ||
+          (screenH === X_WIDTH && screenW === X_HEIGHT))
+  )
 }
 
 export default class NavigationBar extends Component {
@@ -46,11 +65,12 @@ export default class NavigationBar extends Component {
   }
 
   render() {
+    // console.log(DeviceInfo.getModel())
     //  状态栏
     //  IOS不支持直接修改StatusBar 所以只能修改外层view
     let status = <View style={[styles.statusBar,this.props.statusBar]}>
-                  <StatusBar {...this.props.statusBar}></StatusBar>
-                </View>
+      <StatusBar {...this.props.statusBar}></StatusBar>
+    </View>
     //  如果同时传入title和titleview 则优先显示titleview
     let titleView = this.props.titleView ? this.props.titleView : <Text style={styles.title}>{this.props.title}</Text>
 
@@ -62,10 +82,10 @@ export default class NavigationBar extends Component {
       {this.props.rightButton}
     </View>
     return (
-      <View style={[styles.container,this.props.style]}>
-        {status}
-        {content}
-      </View>
+        <View style={[styles.container,this.props.style]}>
+          {status}
+          {content}
+        </View>
     )
   }
 }
@@ -73,6 +93,8 @@ export default class NavigationBar extends Component {
 const styles = StyleSheet.create({
   container:{
     // backgroundColor:'#ddd'
+    paddingTop: isIphoneX() ? 20 : 0,
+    paddingBottom: isIphoneX() ? 8 : 0
   },
   navBar:{
     justifyContent: 'space-between',
@@ -94,6 +116,6 @@ const styles = StyleSheet.create({
     color:'#fff'
   },
   statusBar:{
-    height:Platform.os === 'ios' ? STATUS_BAR_HEIGHT : 0
+    height:Platform.OS === 'ios' ? STATUS_BAR_HEIGHT : 0
   }
 })
