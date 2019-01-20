@@ -14,7 +14,7 @@ import User from '../pages/User'
 //  二级页面
 import Hot_SetTab from '../pages/Hot-setTab'
 import Hot_sortTab from '../pages/Hot-sortTab'
-
+import Hot_details from '../pages/Hot-details'
 //  tabBar
 const AppTabBar = createMaterialBottomTabNavigator({
   Hot: {
@@ -80,7 +80,7 @@ const AppTabBar = createMaterialBottomTabNavigator({
   shifting: true, // 图标缩放效果
 })
 //  页面常规路由配置
-const AppCreateStackNavigator = createStackNavigator({
+export const AppCreateStackNavigator = createStackNavigator({
   TabBar: {
     screen: AppTabBar,
     navigationOptions: {
@@ -95,6 +95,12 @@ const AppCreateStackNavigator = createStackNavigator({
   },
   Hot_sortTab:{
     screen:Hot_sortTab,
+    navigationOptions: {
+      header:null
+    }
+  },
+  Hot_details:{
+    screen:Hot_details,
     navigationOptions: {
       header:null
     }

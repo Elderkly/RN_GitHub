@@ -7,8 +7,14 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 
 const KEY = 'text'
 
+import LanguageDao , {FIAG_LANGUAGE} from '../common/js/LanguageDao'
+
 type Props = {};
 export default class App extends Component<Props> {
+  componentDidMount() {
+    this.languageDao = new LanguageDao(FIAG_LANGUAGE.flag_key)
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -25,16 +31,8 @@ export default class App extends Component<Props> {
         <View style={{flexDirection: 'row'}}>
           <Text
             style={styles.button}
-            onPress={() => this._setStorage()}
-          >保存</Text>
-          <Text
-            style={styles.button}
             onPress={() => this._removeStorage()}
-          >移除</Text>
-          <Text
-            style={styles.button}
-            onPress={() => this._getStorage()}
-          >获取</Text>
+          > 初始化缓存</Text>
         </View>
         <Toast ref="toast"/>
       </View>
@@ -52,13 +50,14 @@ export default class App extends Component<Props> {
   }
 
   _removeStorage () {
-    AsyncStorage.removeItem(KEY,(error) => {
-      if (!error) {
-        this.refs.toast.show('移除成功')
-      } else {
-        this.refs.toast.show('移除失败')
-      }
-    })
+    this.languageDao.init()
+    // AsyncStorage.removeItem(KEY,(error) => {
+    //   if (!error) {
+    //     this.refs.toast.show('移除成功')
+    //   } else {
+    //     this.refs.toast.show('移除失败')
+    //   }
+    // })
   }
 
   _getStorage() {

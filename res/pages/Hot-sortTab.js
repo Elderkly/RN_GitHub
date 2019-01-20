@@ -47,34 +47,31 @@ export default class HotsortTab extends Component {
         })
         this.orginalCheckedArray = JSON.parse(JSON.stringify(checkedArray))
     }
-    
+
+    getSortResult() {
+        //  先把数据库中的所有数据克隆下来
+        this.sortResultArray = JSON.parse(JSON.stringify(this.dataArray))
+        for (let x = 0 ; x < this.orginalCheckedArray.length ; x ++) {
+            const item = this.orginalCheckedArray[x]
+            //  找出用户订阅的标签在原数组中的位置
+            const index = this.dataArray.findIndex(e => JSON.stringify(e) == JSON.stringify(item))
+            //  将原数组中用户订阅的标签替换为重新排序后的标签
+            this.sortResultArray.splice(index,1,this.state.checkedArray[x])
+            // console.log(index,this.dataArray)
+        }
+    }
+
     render() {
         const {navigation} = this.props
         const rightButton = <TouchableOpacity
             onPress={e => {
                 const isEqual = ArrayUtil.isEqual(this.orginalCheckedArray,this.state.checkedArray)
                 if (!isEqual) {
-                    Alert.alert(
-                        '提示',
-                        '确定保存吗',
-                        [
-                          {text: 'Cancel'},
-                          {text: 'OK', onPress: () => {
-                              console.log('OK')
-                            // this.LanguageDao.save(this.state.data , error => {
-                            //   if (!error) {
-                            //     this.refs.toast.show('保存成功')
-                            //     setTimeout(() => {
-                            //       this.props.navigation.goBack()
-                            //     },1500)
-                            //   } else {
-                            //     this.refs.toast.show('保存失败')
-                            //   }
-                            // })
-                          }},
-                        ],
-                        { cancelable: false }
-                      )
+                    this.getSortResult()
+                    this.languageDao.save(this.sortResultArray)
+                    navigation.goBack()
+                } else {
+                    navigation.goBack()
                 }
             }}
         >

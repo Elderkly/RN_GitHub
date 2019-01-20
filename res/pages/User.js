@@ -19,6 +19,7 @@ export default class App extends Component {
                 <Text
                     style={styles.text}
                     onPress={() => {
+                        console.log(navigation)
                         navigation.navigate('Hot_SetTab')
                     }}
                 >自定义标签</Text>

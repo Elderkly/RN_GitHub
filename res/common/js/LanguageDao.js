@@ -21,7 +21,7 @@ export default class LanguageDao {
           reject(error)
         } else {
           // AsyncStorage.removeItem(this.flag)
-          if (result) { //  如果已经有缓存
+          if (result && result != 'null') { //  如果已经有缓存
             //  防止JSON解析出错
             try {
               resolve(JSON.parse(result))
@@ -42,4 +42,10 @@ export default class LanguageDao {
       callback ? callback(error) : ''
     })
   }
+  init(callback) {
+    AsyncStorage.setItem(this.flag,JSON.stringify(keys), error => {
+      callback ? callback(error) : ''
+    })
+  }
+
 }

@@ -6,6 +6,14 @@ import NavigationBar from '../common/js/NavigationBar'
 
 import {MaterialTopTabNavigator} from '../config/MaterialTopTabNavigator'
 
+/*
+   由于HOT页面的TopNavigator有些特殊
+   获取的路由是TopNavigator的路由
+   无法实现一二级页面的跳转
+   所以将hot页面的路由导出用于在MaterialTopTabNavigator.js中进行跳转
+*/
+export let Homenavigation = null
+
 //  页面主容器
 type Props = {};
 export default class App extends Component<Props> {
@@ -17,11 +25,9 @@ export default class App extends Component<Props> {
 
   }
 
-  initTopTabNavigato() {
-
-  }
-
   render() {
+    const {navigation} = this.props
+    Homenavigation = navigation
     // StatusBar.setBackgroundColor('rgb(101,24,244)')
     return (
       <View style={styles.container}>
