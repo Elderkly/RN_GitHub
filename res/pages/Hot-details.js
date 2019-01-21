@@ -48,6 +48,7 @@ export default class Details extends Component<Props> {
                     ref={webView => this.webView = webView}
                     source={{uri:this.state.url}}
                     startInLoadingState={true}
+                    onNavigationStateChange={e=>this.onNavigationStateChange(e)}
                 />
             </View>
         );
