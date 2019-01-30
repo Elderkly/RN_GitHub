@@ -10,7 +10,7 @@ import {MaterialTopTabNavigator} from '../config/MaterialTopTabNavigator'
    由于HOT页面的TopNavigator有些特殊
    获取的路由是TopNavigator的路由
    无法实现一二级页面的跳转
-   所以将hot页面的路由导出用于在MaterialTopTabNavigator.js中进行跳转
+   所以将hot页面的路由导出用于在MaterialTopTabNavigator.js中进行跳转123
 */
 export let Homenavigation = null
 
