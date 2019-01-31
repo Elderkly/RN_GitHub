@@ -3,8 +3,7 @@ import React, {Component} from 'react';
 import {Text, View,StyleSheet} from 'react-native';
 import NavigationBar from '../common/js/NavigationBar'
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -35,11 +34,11 @@ export default class App extends Component<Props> {
   }
   render() {
     return (
-      <View style={styles.container}>
-        <NavigationBar/>
-        <Text style={styles.welcome}>欢迎页</Text>
-        <Text style={{fontSize: 60}}>{this.state.time}</Text>
-      </View>
+        <View style={styles.container}>
+          <NavigationBar/>
+          <Text style={styles.welcome}>欢迎页</Text>
+          <Text style={{fontSize: 60}}>{this.state.time}</Text>
+        </View>
     );
   }
 }

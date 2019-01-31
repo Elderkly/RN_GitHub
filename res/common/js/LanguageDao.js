@@ -5,6 +5,7 @@ import {AsyncStorage} from 'react-native'
 
 //  假数据
 import keys from '../data/keys.json'
+import langs from '../data/langs.json'
 
 //  key 根据不同的key返回相应数据  flag_key:自定义标签
 export var FIAG_LANGUAGE = {flag_language:'flag_language_language',flag_key:'flag_language_key'}
@@ -29,7 +30,7 @@ export default class LanguageDao {
               reject(e)
             }
           } else {  //  没有缓存 返回默认数据
-            var data = this.flag === FIAG_LANGUAGE.flag_key ? keys : null
+            var data = this.flag === FIAG_LANGUAGE.flag_key ? keys : langs
             this.save(data)
             resolve(data)
           }
@@ -42,10 +43,4 @@ export default class LanguageDao {
       callback ? callback(error) : ''
     })
   }
-  init(callback) {
-    AsyncStorage.setItem(this.flag,JSON.stringify(keys), error => {
-      callback ? callback(error) : ''
-    })
-  }
-
 }
