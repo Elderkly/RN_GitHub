@@ -4,6 +4,7 @@ import {Text, View,StyleSheet,FlatList,Image,ActivityIndicator,TouchableOpacity,
 import {createMaterialTopTabNavigator,createAppContainer} from 'react-navigation'
 import GitHubTrending from 'GitHubTrending'
 
+import CollectDao from '../common/js/CollectDao'
 import {Homenavigation} from '../pages/hot'
 
 import Fetch from "../common/js/HttpRequest";
@@ -22,6 +23,15 @@ const newSeen = (SHOWTYPE,_type) => {
         isLoading:true, //  显示下拉loading
         ShowDownDom:false,  //  显示上拉dom
       }
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+      console.log('属性刷新')
+    }
+
+    shouldComponentUpdate(nextProps,nextState){
+      console.log('属性刷新',nextProps,nextState)
+      return true
     }
     //  render之前
     componentWillMount(){
@@ -175,7 +185,8 @@ const newSeen = (SHOWTYPE,_type) => {
       const item = {
         name: r.fullName,
         html_url: 'https://github.com/' + r.url,
-        flag_language:true
+        flag_language:true,
+        itemsData: r
       }
       return (
           <TouchableOpacity
@@ -210,57 +221,20 @@ const newSeen = (SHOWTYPE,_type) => {
     }
     //  单击收藏按钮
     _selectPressItem(key,data) {
-      //  获取当前点击数据收藏状态
       const isCollect = data.item.isCollect
-      //  获取已收藏的数据
-      AsyncStorage.getItem(key,(error,ject) => {
-        if (error) {
-          console.log('获取失败')
-        } else {
-          const Stirage = ject === null ? [] : JSON.parse(ject)
-          //  数据已收藏 需要取消收藏
-          if (isCollect) {
-            //  获取当前点击数据在缓存中的位置
-            const index = key == 'KeyCollect'
-                ? Stirage.findIndex(e => e.id === data.item.id)
-                : Stirage.findIndex(e => e.fullName === data.item.fullName)
-            //  删除当前点击数据
-            Stirage.splice(index,1)
-            console.log(Stirage)
-          } else {  //  反之需要加入收藏
-            Stirage.push(data.item)
-            console.log(Stirage)
-          }
-          //  重新写入缓存
-          AsyncStorage.setItem(key,JSON.stringify(Stirage),error => {
-            if (!error) {
-              //  刷新数据
-              this.state.data[data.index].isCollect = !isCollect
-              this.setState({
-                data:this.state.data
-              })
-            }
-          })
-        }
+      CollectDao.setCollection(isCollect,key,data,res => {
+        this.state.data[data.index].isCollect = !isCollect
+        this.setState({
+          data:this.state.data
+        })
       })
     }
     //  初始化数组 根据缓存添加是否收藏字段
     _initData(key,data) {
-      AsyncStorage.getItem(key,(error,ject) => {
-        if (error) {
-          console.log('获取出错',error)
-        } else {
-          const json = ject === null ? [] : JSON.parse(ject)
-          for (let x in data) {
-            //  由于热门模块和趋势模块数据模型不同 所以需要区分处理
-            data[x].isCollect = key == 'KeyCollect'
-                ? (json.find(e => e.id == data[x].id) ? true : false)
-                : (json.find(e => e.fullName == data[x].fullName) ? true : false)
-          }
-          this.setState({
-            data:data
-          })
-        }
+      CollectDao.initData(key,data,res => {
+        this.setState({
+          data:res
+        })
       })
     }
   }

@@ -3,37 +3,55 @@ import React, {Component} from 'react';
 import {Text, View, StyleSheet, WebView,TextInput} from 'react-native';
 
 import NavigationBar from '../common/js/NavigationBar'
+import CollectionHot from './Collection-hot'
+import CollectionTrend from './Collection-trend'
 
-import Toast from 'react-native-easy-toast'
+import {createMaterialTopTabNavigator,createAppContainer} from 'react-navigation'
 
-const URL = 'http://www.baidu.com'
+const CollectionPage = {
+  hot:{
+    screen: CollectionHot,
+    navigationOptions: {
+      tabBarLabel: '热门'
+    }
+  },
+  trend:{
+    screen: CollectionTrend,
+    navigationOptions: {
+      tabBarLabel: '趋势'
+    }
+  },
+}
+
+const CollectionNavigationTabStyle = {
+  lazy:true,  //  懒加载
+  tabBarOptions: {
+    upperCaseLabel: false,//是否使标签大写，默认为true
+    scrollEnabled: false ,//是否支持 选项卡滚动，默认false
+    style: {
+      backgroundColor: 'rgb(0,109,106)'
+    },
+    indicatorStyle: {
+      height: 2,
+      backgroundColor: 'white',
+    },//标签指示器的样式
+    labelStyle: {
+      fontSize: 13,
+      marginTop: 6,
+      marginBottom: 6,
+    },//文字的样式
+  }
+}
+
+const CollectionTopNavigation = createAppContainer(createMaterialTopTabNavigator(CollectionPage,CollectionNavigationTabStyle))
+
 
 type Props = {};
 export default class App extends Component<Props> {
   constructor(props) {
     super(props)
     this.state = {
-      url: URL,
-      canGoBack:false
     }
-  }
-  onNavigationStateChange(e) {
-    this.setState({
-      canGoBack: e.canGoBack,
-      title:e.title
-    })
-  }
-  goBack() {
-    if (this.state.canGoBack) {
-      this.webView.goBack()
-    }else {
-      this.refs.toast.show('已经到底了')
-    }
-  }
-  go() {
-    this.setState({
-      url:this.text
-    })
   }
   render() {
     return (
@@ -44,26 +62,7 @@ export default class App extends Component<Props> {
             backgroundColor:'rgb(0,109,106)'
           }}
         />
-        <View style={{flexDirection: 'row',alignItems: 'center',margin:10}}>
-          <Text
-            style={{fontSize: 24}}
-            onPress={() => this.goBack()}
-          >返回</Text>
-          <TextInput
-            style={{height:40,flex:1,borderWidth: 1,marginHorizontal: 10}}
-            defaultValue={this.state.url}
-            onChangeText={text=>this.text=text}
-          />
-          <Text
-            onPress={() => this.go()}
-          >GO</Text>
-        </View>
-        <WebView
-          ref={webView => this.webView = webView}
-          source={{uri:this.state.url}}
-          onNavigationStateChange={e=>this.onNavigationStateChange(e)}
-        />
-        <Toast ref="toast"/>
+        <CollectionTopNavigation/>
       </View>
     );
   }
