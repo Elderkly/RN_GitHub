@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Text, View,StyleSheet,FlatList,Image,ActivityIndicator,TouchableOpacity} from 'react-native';
+import {Text, View,StyleSheet,FlatList,Image,ActivityIndicator,TouchableOpacity,AsyncStorage} from 'react-native';
 import {createMaterialTopTabNavigator,createAppContainer} from 'react-navigation'
 import GitHubTrending from 'GitHubTrending'
 
@@ -33,6 +33,7 @@ const newSeen = (SHOWTYPE,_type) => {
           <View>
             <FlatList
                 data={this.state.data}  //  数据
+                extraData={this.state.data}
                 renderItem={(data) => SHOWTYPE === 'flag_key' ? this.flag_keyLoadRenderDom(data) : this.flag_languageLoadRenderDom(data)}  //  渲染模板
                 refreshing={this.state.isLoading} //  是否显示下拉loading
                 onRefresh={() => this.upLoad()} //  下拉刷新事件
@@ -96,14 +97,16 @@ const newSeen = (SHOWTYPE,_type) => {
           .then( res => {
             //  如果翻页了需要将数据push到原数组后见面 否则的话直接覆盖原数组就行
             let newJson
-            if (type == 'down' && this.state.per_page * this.state.loadIndex > 100) {
+            if (type === 'down' && this.state.per_page * this.state.loadIndex > 100) {
               newJson = this.state.data
               res.items.map(e => {
                 newJson.push(e)
               })
             }
+            this._initData('KeyCollect',type === 'down' && this.state.per_page * this.state.loadIndex > 100 ? newJson : res.items)
+
             this.setState({
-              data:type == 'down' && this.state.per_page * this.state.loadIndex > 100 ? newJson : res.items,
+              // data:type === 'down' && this.state.per_page * this.state.loadIndex > 100 ? newJson : res.items,
               ShowDownDom:true
             })
             setTimeout(() => {
@@ -121,10 +124,7 @@ const newSeen = (SHOWTYPE,_type) => {
       const URL =  `https://github.com/trending/${_type}?since=daily`
       new GitHubTrending().fetchTrending(URL)
           .then((data)=> {
-            // console.log(data)
-            this.setState({
-              data:data
-            })
+            this._initData('languageCollect',data)
             setTimeout(() => {
               this.setState({
                 isLoading:false
@@ -159,7 +159,11 @@ const newSeen = (SHOWTYPE,_type) => {
                   <Text>Stars:</Text>
                   <Text>{r.stargazers_count}</Text>
                 </View>
-                <Icon name='ios-star-outline' color={'rgb(101,24,244)'} size={24} />
+                <TouchableOpacity
+                    onPress={() => this._selectPressItem('KeyCollect',data)}
+                >
+                  <Icon name={r.isCollect ? 'ios-star' : 'ios-star-outline' } color={'rgb(31,101,255)'} size={24} />
+                </TouchableOpacity>
               </View>
             </View>
           </TouchableOpacity>
@@ -194,11 +198,70 @@ const newSeen = (SHOWTYPE,_type) => {
                   <Text>Stars:</Text>
                   <Text>{r.starCount}</Text>
                 </View>
-                <Icon name='ios-star-outline' color={'rgb(31,101,255)'} size={24} />
+                <TouchableOpacity
+                  onPress={() => this._selectPressItem('languageCollect',data)}
+                >
+                  <Icon name={r.isCollect ? 'ios-star' : 'ios-star-outline' } color={'rgb(31,101,255)'} size={24} />
+                </TouchableOpacity>
               </View>
             </View>
           </TouchableOpacity>
       )
+    }
+    //  单击收藏按钮
+    _selectPressItem(key,data) {
+      //  获取当前点击数据收藏状态
+      const isCollect = data.item.isCollect
+      //  获取已收藏的数据
+      AsyncStorage.getItem(key,(error,ject) => {
+        if (error) {
+          console.log('获取失败')
+        } else {
+          const Stirage = ject === null ? [] : JSON.parse(ject)
+          //  数据已收藏 需要取消收藏
+          if (isCollect) {
+            //  获取当前点击数据在缓存中的位置
+            const index = key == 'KeyCollect'
+                ? Stirage.findIndex(e => e.id === data.item.id)
+                : Stirage.findIndex(e => e.fullName === data.item.fullName)
+            //  删除当前点击数据
+            Stirage.splice(index,1)
+            console.log(Stirage)
+          } else {  //  反之需要加入收藏
+            Stirage.push(data.item)
+            console.log(Stirage)
+          }
+          //  重新写入缓存
+          AsyncStorage.setItem(key,JSON.stringify(Stirage),error => {
+            if (!error) {
+              //  刷新数据
+              this.state.data[data.index].isCollect = !isCollect
+              this.setState({
+                data:this.state.data
+              })
+            }
+          })
+        }
+      })
+    }
+    //  初始化数组 根据缓存添加是否收藏字段
+    _initData(key,data) {
+      AsyncStorage.getItem(key,(error,ject) => {
+        if (error) {
+          console.log('获取出错',error)
+        } else {
+          const json = ject === null ? [] : JSON.parse(ject)
+          for (let x in data) {
+            //  由于热门模块和趋势模块数据模型不同 所以需要区分处理
+            data[x].isCollect = key == 'KeyCollect'
+                ? (json.find(e => e.id == data[x].id) ? true : false)
+                : (json.find(e => e.fullName == data[x].fullName) ? true : false)
+          }
+          this.setState({
+            data:data
+          })
+        }
+      })
     }
   }
 }
@@ -255,8 +318,6 @@ export const getPagesData = (type) => {
         console.log(error)
       })
 }
-
-// getPagesData()
 
 const styles = StyleSheet.create({
   container: {
