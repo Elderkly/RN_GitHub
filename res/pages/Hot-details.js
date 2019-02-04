@@ -1,6 +1,6 @@
 
 import React, {Component} from 'react';
-import {View, StyleSheet,WebView,TouchableOpacity} from 'react-native';
+import {View, StyleSheet,WebView,TouchableOpacity,DeviceEventEmitter} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import NavigationBar from '../common/js/NavigationBar'
@@ -28,7 +28,9 @@ export default class Details extends Component {
             flag_language: !!items.flag_language,
             Collection:!!items.Collection,
             itemsData:items.itemsData,
-            isCollect:items.itemsData ? items.itemsData.isCollect : items.isCollect
+            initCollect:items.itemsData ? items.itemsData.isCollect : items.isCollect,
+            isCollect:items.itemsData ? items.itemsData.isCollect : items.isCollect,
+            tabTab:items.tabType
         })
     }
     onNavigationStateChange(e) {
@@ -69,6 +71,12 @@ export default class Details extends Component {
                             this.webView.goBack()
                         }else {
                             navigation.goBack()
+                            //    如果刷新了收藏状态则发送刷新事件刷新相应页面的数据
+                            if (this.state.initCollect !== this.state.isCollect) {
+                                DeviceEventEmitter.emit('detailsGoBack' + this.state.tabTab,{
+                                    page:this.state.Collection ? 'Collect' : (this.state.flag_language ? 'Trend' : 'Hot')
+                                })
+                            }
                         }
                     })}
                     rightButton={this.renderRightButton()}

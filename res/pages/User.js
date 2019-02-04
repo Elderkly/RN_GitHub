@@ -1,6 +1,7 @@
 
 import React, {Component} from 'react';
-import {Text, View,StyleSheet} from 'react-native';
+import {Text, View,StyleSheet,TouchableOpacity,SectionList,ScrollView} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import NavigationBar from '../common/js/NavigationBar'
 
@@ -15,20 +16,55 @@ export default class App extends Component {
                         backgroundColor:'rgb(208,39,96)'
                     }}
                 />
-                <Text style={styles.text}>Pages 我的</Text>
-                <Text
-                    style={styles.text}
-                    onPress={() => {
-                        console.log(navigation)
-                        navigation.navigate('Hot_SetTab')
-                    }}
-                >自定义标签</Text>
-                <Text
-                    style={styles.text}
-                    onPress={() => {
-                        navigation.navigate('Hot_sortTab')
-                    }}
-                >标签排序</Text>
+                <ScrollView>
+                    <TouchableOpacity
+                        style={styles.items}
+                    >
+                        <Icon name='ios-compass' color={'rgb(208,39,96)'} size={40} />
+                        <Text
+                            style={styles.itemsText}
+                        >项目简介</Text>
+                        <Icon name='ios-arrow-forward' color={'rgb(208,39,96)'} size={24} />
+                    </TouchableOpacity>
+                    <SectionList
+                        sections={[
+                            {
+                                title:'编辑标签',
+                                data:[
+                                    {icon:'ios-build',text:'自定义标签',url:'Hot_SetTab'},
+                                    {icon:'ios-repeat',text:'标签排序',url:'Hot_sortTab'},
+                                ]
+                            },
+                            {
+                                title:'其他标签',
+                                data:[
+                                    {icon:'ios-shirt',text:'切换主题',url:''},
+                                    {icon:'ios-person',text:'关于作者',url:''},
+                                    {icon:'ios-paper-plane',text:'联系我们',url:''},
+                                ]
+                            }
+                        ]}
+                        renderItem={({ item, index, section }) => (
+                            <TouchableOpacity
+                                style={styles.items}
+                                onPress={() => {
+                                    navigation.navigate(item.url)
+                                }}
+                            >
+                                <Icon name={item.icon} color={'rgb(208,39,96)'} size={24} />
+                                <Text
+                                    key={index}
+                                    style={styles.itemsText}
+                                >{item.text}</Text>
+                                <Icon name='ios-arrow-forward' color={'rgb(208,39,96)'} size={24} />
+                            </TouchableOpacity>
+                        )}
+                        renderSectionHeader={({ section: { title } }) => (
+                            <Text style={styles.header}>{title}</Text>
+                        )}
+                        ItemSeparatorComponent={() => <View style={{height:1,backgroundColor:'#dfdfdf'}}/>}
+                    />
+                </ScrollView>
             </View>
         );
     }
@@ -51,5 +87,24 @@ const styles = StyleSheet.create({
     text:{
         fontSize:24,
         marginVertical: 10,
+    },
+    items:{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        paddingHorizontal: 15,
+        paddingVertical: 20
+    },
+    itemsText:{
+        flex:1,
+        marginLeft: 10,
+        fontSize:16
+    },
+    header:{
+        backgroundColor:'#eee',
+        fontSize:14,
+        paddingLeft: 15,
+        justifyContent: 'center',
+        paddingVertical: 8
     }
 });

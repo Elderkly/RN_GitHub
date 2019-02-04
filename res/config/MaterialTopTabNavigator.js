@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Text, View,StyleSheet,FlatList,Image,ActivityIndicator,TouchableOpacity,AsyncStorage} from 'react-native';
+import {Text, View,StyleSheet,FlatList,Image,ActivityIndicator,TouchableOpacity,DeviceEventEmitter} from 'react-native';
 import {createMaterialTopTabNavigator,createAppContainer} from 'react-navigation'
 import GitHubTrending from 'GitHubTrending'
 
@@ -25,17 +25,16 @@ const newSeen = (SHOWTYPE,_type) => {
       }
     }
 
-    componentWillReceiveProps(nextProps, nextContext) {
-      console.log('属性刷新')
-    }
-
-    shouldComponentUpdate(nextProps,nextState){
-      console.log('属性刷新',nextProps,nextState)
-      return true
-    }
     //  render之前
     componentWillMount(){
       this.getData()
+      //  监听从详情页返回刷新状态
+      this.listen = DeviceEventEmitter.addListener('detailsGoBack' + _type,res => {
+        this.getData()
+      })
+    }
+    componentWillUnmount(){
+      console.log('组件卸载')
     }
 
     render() {
@@ -147,7 +146,7 @@ const newSeen = (SHOWTYPE,_type) => {
     //  热门 模板
     flag_keyLoadRenderDom(data){
       const r = data.item
-
+      r.tabType = _type
       return (
           <TouchableOpacity
               onPress={() => {
@@ -186,7 +185,8 @@ const newSeen = (SHOWTYPE,_type) => {
         name: r.fullName,
         html_url: 'https://github.com/' + r.url,
         flag_language:true,
-        itemsData: r
+        itemsData: r,
+        tabType:_type
       }
       return (
           <TouchableOpacity
