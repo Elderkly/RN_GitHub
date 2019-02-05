@@ -30,7 +30,8 @@ export default class Details extends Component {
             itemsData:items.itemsData,
             initCollect:items.itemsData ? items.itemsData.isCollect : items.isCollect,
             isCollect:items.itemsData ? items.itemsData.isCollect : items.isCollect,
-            tabTab:items.tabType
+            tabTab:items.tabType,
+            HiddenCollectIcon:items.HiddenCollectIcon
         })
     }
     onNavigationStateChange(e) {
@@ -57,6 +58,7 @@ export default class Details extends Component {
         )
     }
     render() {
+        console.log(this.state)
         const {navigation} = this.props
         return (
             <View style={styles.container}>
@@ -79,7 +81,7 @@ export default class Details extends Component {
                             }
                         }
                     })}
-                    rightButton={this.renderRightButton()}
+                    rightButton={this.state.HiddenCollectIcon ? null : this.renderRightButton()}
                 />
                 <WebView
                     ref={webView => this.webView = webView}

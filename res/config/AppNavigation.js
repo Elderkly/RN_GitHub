@@ -15,6 +15,8 @@ import User from '../pages/User'
 import Hot_SetTab from '../pages/Hot-setTab'
 import Hot_sortTab from '../pages/Hot-sortTab'
 import Hot_details from '../pages/Hot-details'
+
+import User_about from '../pages/User-about'
 //  tabBar
 const AppTabBar = createMaterialBottomTabNavigator({
   Hot: {
@@ -101,6 +103,12 @@ export const AppCreateStackNavigator = createStackNavigator({
   },
   Hot_details:{
     screen:Hot_details,
+    navigationOptions: {
+      header:null
+    }
+  },
+  User_about:{
+    screen:User_about,
     navigationOptions: {
       header:null
     }

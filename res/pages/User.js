@@ -19,6 +19,7 @@ export default class App extends Component {
                 <ScrollView>
                     <TouchableOpacity
                         style={styles.items}
+                        onPress={() => navigation.navigate('User_about')}
                     >
                         <Icon name='ios-compass' color={'rgb(208,39,96)'} size={40} />
                         <Text
@@ -36,7 +37,7 @@ export default class App extends Component {
                                 ]
                             },
                             {
-                                title:'其他标签',
+                                title:'其他功能',
                                 data:[
                                     {icon:'ios-shirt',text:'切换主题',url:''},
                                     {icon:'ios-person',text:'关于作者',url:''},
