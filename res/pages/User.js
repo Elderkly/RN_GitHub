@@ -1,6 +1,6 @@
 
 import React, {Component} from 'react';
-import {Text, View,StyleSheet,TouchableOpacity,SectionList,ScrollView} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, SectionList, ScrollView, Linking, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import NavigationBar from '../common/js/NavigationBar'
@@ -40,8 +40,15 @@ export default class App extends Component {
                                 title:'其他功能',
                                 data:[
                                     {icon:'ios-shirt',text:'切换主题',url:''},
-                                    {icon:'ios-person',text:'关于作者',url:''},
-                                    {icon:'ios-paper-plane',text:'联系我们',url:''},
+                                    {icon:'ios-person',text:'关于作者',url:'Hot_details',data:{
+                                            item:{
+                                                name: "QZP743",
+                                                html_url: "https://github.com/Elderkly",
+                                                flag_language:true,
+                                                HiddenCollectIcon:true,
+                                            }}
+                                    },
+                                    {icon:'ios-paper-plane',text:'联系我们',url:null},
                                 ]
                             }
                         ]}
@@ -49,7 +56,17 @@ export default class App extends Component {
                             <TouchableOpacity
                                 style={styles.items}
                                 onPress={() => {
-                                    navigation.navigate(item.url)
+                                    if (item.url) navigation.navigate(item.url,item.data ? item.data : null)
+                                    else if (item.url === null) {
+                                        const url = 'mailto://897676943@qq.com'
+                                        Linking.canOpenURL(url).then(supported => {
+                                            if (!supported) {
+                                                Alert.alert('提示','请先安装邮箱客户端')
+                                            } else {
+                                                return Linking.openURL(url);
+                                            }
+                                        }).catch(err => console.error('An error occurred', err));
+                                    }
                                 }}
                             >
                                 <Icon name={item.icon} color={'rgb(208,39,96)'} size={24} />

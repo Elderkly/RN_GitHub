@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import {
     Dimensions,
     Image,
-    ListView,
-    PixelRatio,
     StyleSheet,
     Text,
     View,
     TouchableOpacity,
     Linking,
-    Alert
+    Alert,
+    Modal
 } from 'react-native';
+
+import ImageViewer from 'react-native-image-zoom-viewer';
+
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -20,14 +22,14 @@ import {isIphoneX} from '../common/js/util'
 import Fetch from "../common/js/HttpRequest";
 
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
-import {Homenavigation} from "./hot";
-import CollectDao from "../common/js/CollectDao";
+
 
 class Talks extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items:[]
+            items:[],
+            showModel:false
         }
     }
 
@@ -57,6 +59,7 @@ class Talks extends Component {
             <ParallaxScrollView
                 onScroll={onScroll}
 
+                backgroundColor="rgba(0,0,0,.5)"
                 headerBackgroundColor="#333"
                 stickyHeaderHeight={ STICKY_HEADER_HEIGHT }
                 parallaxHeaderHeight={ PARALLAX_HEADER_HEIGHT }
@@ -77,11 +80,37 @@ class Talks extends Component {
                 //  header
                 renderForeground={() => (
                     <View key="parallax-header" style={ styles.parallaxHeader }>
-                        <Image style={ styles.avatar } source={{
-                            uri: r.owner ? r.owner.avatar_url : '',
-                            width: AVATAR_SIZE,
-                            height: AVATAR_SIZE
-                        }}/>
+                        <TouchableOpacity
+                            onPress={() => this.setState({showModel:true})}
+                        >
+                            <Image
+                                style={ styles.avatar }
+                                source={{
+                                    uri: r.owner ? r.owner.avatar_url : '',
+                                    width: AVATAR_SIZE,
+                                    height: AVATAR_SIZE
+                                }}
+                            />
+                        </TouchableOpacity>
+
+                        <Modal
+                            visible={this.state.showModel}
+                            transparent={true}
+                        >
+                            <ImageViewer
+                                imageUrls={[
+                                    {
+                                        url: r.owner ? r.owner.avatar_url : '',
+                                    }
+                                ]}
+                                enableSwipeDown={true}  //  是否开启下滑关闭
+                                onSwipeDown={() => this.setState({showModel: false})}   //  下滑事件
+                                onClick={() => this.setState({showModel: false})}   //  点击事件
+                                saveToLocalByLongPress={false}  //  是否显示长按菜单
+                                swipeDownThreshold={10}     //  下滑关闭距离
+                            />
+                        </Modal>
+
                         <Text style={ styles.sectionSpeakerText }>
                             RN-GitHub
                         </Text>
@@ -100,7 +129,7 @@ class Talks extends Component {
                 renderFixedHeader={() => (
                     <View key="fixed-header" style={styles.fixedSection}>
                         <TouchableOpacity style={styles.fixedSectionText}
-                              onPress={() => {navigation.goBack()}}>
+                                          onPress={() => {navigation.goBack()}}>
                             <FontAwesome name='angle-left' color={'#fff'} size={30} />
                         </TouchableOpacity>
                     </View>
