@@ -91,7 +91,7 @@ def enableSeparateBuildPerCPUArchitecture = false
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -109,10 +109,10 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("./my-release-key.keystore")
-            storePassword "sdupb072kkle"
-            keyAlias "my-release-key"
-            keyPassword "sdupb072kkle"
+            storeFile file(MYAPP_RELEASE_STORE_FILE)
+            storePassword MYAPP_RELEASE_STORE_PASSWORD
+            keyAlias MYAPP_RELEASE_KEY_ALIAS
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD
         }
      }
     splits {
