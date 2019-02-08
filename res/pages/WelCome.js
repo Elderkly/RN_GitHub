@@ -36,7 +36,7 @@ export default class App extends Component {
     return (
         <View style={styles.container}>
           <NavigationBar/>
-          <Text style={styles.welcome}>欢迎页</Text>
+          <Text style={styles.welcome}>这是一条广告</Text>
           <Text style={{fontSize: 60}}>{this.state.time}</Text>
         </View>
     );
