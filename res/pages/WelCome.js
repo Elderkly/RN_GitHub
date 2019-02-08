@@ -16,15 +16,15 @@ export default class App extends Component {
       this.setState({
         time: this.state.time - 1
       })
-      // if (this.state.time == 0) {
-      //       //   clearInterval(this.Interval)
-      //       //   navigation.navigate('TabBar')
-      //       // }
-      //  测试
-      if (this.state.time) {
+      if (this.state.time == 0) {
         clearInterval(this.Interval)
         navigation.navigate('TabBar')
       }
+      //  测试
+      // if (this.state.time) {
+      //   clearInterval(this.Interval)
+      //   navigation.navigate('TabBar')
+      // }
     },1000)
   }
   componentDidMount(){
