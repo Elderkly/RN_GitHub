@@ -69,7 +69,11 @@ export default class NavigationBar extends Component {
     //  状态栏
     //  IOS不支持直接修改StatusBar 所以只能修改外层view
     let status = <View style={[styles.statusBar,this.props.statusBar]}>
-      <StatusBar {...this.props.statusBar}></StatusBar>
+      <StatusBar
+          {...this.props.statusBar}
+          translucent={true}
+          backgroundColor={'rgba(0,0,0,0)'}
+      ></StatusBar>
     </View>
     //  如果同时传入title和titleview 则优先显示titleview
     let titleView = this.props.titleView ? this.props.titleView : <Text style={styles.title}>{this.props.title}</Text>
@@ -116,6 +120,7 @@ const styles = StyleSheet.create({
     color:'#fff'
   },
   statusBar:{
-    height:Platform.OS === 'ios' ? STATUS_BAR_HEIGHT : 0
+    height:Platform.OS === 'ios' ? STATUS_BAR_HEIGHT : 0,
+    paddingTop: Platform.OS === 'ios' ? 0 : 20
   }
 })

@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     Linking,
     Alert,
-    Modal
+    Modal, Platform
 } from 'react-native';
 
 import ImageViewer from 'react-native-image-zoom-viewer';
@@ -206,7 +206,7 @@ const window = Dimensions.get('window');
 const AVATAR_SIZE = 120;
 const ROW_HEIGHT = 60;
 const PARALLAX_HEADER_HEIGHT = 350;
-const STICKY_HEADER_HEIGHT = isIphoneX() ? 90 : 70;
+const STICKY_HEADER_HEIGHT = Platform.OS === 'ios' ? (isIphoneX() ? 90 : 70) : 50;
 
 const styles = StyleSheet.create({
     container: {
