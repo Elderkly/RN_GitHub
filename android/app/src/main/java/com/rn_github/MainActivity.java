@@ -2,6 +2,10 @@ package com.rn_github;
 
 import com.facebook.react.ReactActivity;
 
+import android.os.Bundle;  //add
+import org.devio.rn.splashscreen.SplashScreen; //add
+
+
 public class MainActivity extends ReactActivity {
 
     /**
@@ -10,6 +14,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
+        SplashScreen.show(this);   //add
         return "RN_GitHub";
     }
 }
