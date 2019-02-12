@@ -63,17 +63,20 @@ const AppTabBar = createMaterialBottomTabNavigator({
   },
   User: {
     screen: User,
-    navigationOptions: {
+    navigationOptions: ({navigation,screenProps}) => ({
       tabBarLabel: '我的',
-      tabBarColor:'rgb(208,39,96)',
+      tabBarColor:screenProps ? screenProps : 'rgb(208,39,96)',
       tabBarIcon: ({ tintColor }) => (
-          <Icon name='ios-person' color={tintColor} size={24} />
-      ),
-      // tabBarOnPress:((e) => {
-      //   StatusBar.setBackgroundColor('rgb(208,39,96)')
-      //   e.navigation.navigate('User')
-      // })
-    }
+        <Icon name='ios-person' color={tintColor} size={24} />
+      )
+    }),
+    // navigationOptions: {
+    //   tabBarLabel: '我的',
+    //   tabBarColor:'rgb(208,39,96)',
+    //   tabBarIcon: ({ tintColor }) => (
+    //       <Icon name='ios-person' color={tintColor} size={24} />
+    //   )
+    // }
   }
 },{
   initialRouteName: 'Hot',
@@ -118,12 +121,6 @@ export const AppCreateStackNavigator = createStackNavigator({
 })
 //  初始化 createSwitchNavigator页面只显示一次
 const AppCreateSwitchNavigator = createSwitchNavigator({
-  setup:{
-    screen:setup,
-    navigationOptions:{
-      header:null,
-    }
-  },
   WelCome:{
     screen: WelCome,
     navigationOptions:{

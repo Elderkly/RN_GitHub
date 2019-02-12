@@ -1,11 +1,24 @@
 
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, SectionList, ScrollView, Linking, Alert} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, SectionList, ScrollView, Linking, Alert,AsyncStorage} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import NavigationBar from '../common/js/NavigationBar'
 
+import Color from './User-color'
+
 export default class App extends Component {
+    state = {
+        visible:false,
+        navColor:'rgb(208,39,96)'
+    }
+    componentWillMount() {
+        AsyncStorage.getItem('diyColor',(error,res) => {
+            if (!error) this.setState({navColor:res})
+        })
+    }
+
+
     render() {
         const {navigation} = this.props
         return (
@@ -13,7 +26,7 @@ export default class App extends Component {
                 <NavigationBar
                     title={'我的'}
                     style={{
-                        backgroundColor:'rgb(208,39,96)'
+                        backgroundColor:this.state.navColor
                     }}
                 />
                 <ScrollView>
@@ -21,11 +34,11 @@ export default class App extends Component {
                         style={styles.items}
                         onPress={() => navigation.navigate('User_about')}
                     >
-                        <Icon name='ios-compass' color={'rgb(208,39,96)'} size={40} />
+                        <Icon name='ios-compass' color={this.state.navColor} size={40} />
                         <Text
                             style={styles.itemsText}
                         >项目简介</Text>
-                        <Icon name='ios-arrow-forward' color={'rgb(208,39,96)'} size={24} />
+                        <Icon name='ios-arrow-forward' color={this.state.navColor} size={24} />
                     </TouchableOpacity>
                     <SectionList
                         sections={[
@@ -56,7 +69,8 @@ export default class App extends Component {
                             <TouchableOpacity
                                 style={styles.items}
                                 onPress={() => {
-                                    if (item.url) navigation.navigate(item.url,item.data ? item.data : null)
+                                    if (item.url === '') this.setState({visible:true})
+                                    else if (item.url) navigation.navigate(item.url,item.data ? item.data : null)
                                     else if (item.url === null) {
                                         const url = 'mailto://897676943@qq.com'
                                         Linking.canOpenURL(url).then(supported => {
@@ -69,12 +83,12 @@ export default class App extends Component {
                                     }
                                 }}
                             >
-                                <Icon name={item.icon} color={'rgb(208,39,96)'} size={24} />
+                                <Icon name={item.icon} color={this.state.navColor} size={24} />
                                 <Text
                                     key={index}
                                     style={styles.itemsText}
                                 >{item.text}</Text>
-                                <Icon name='ios-arrow-forward' color={'rgb(208,39,96)'} size={24} />
+                                <Icon name='ios-arrow-forward' color={this.state.navColor} size={24} />
                             </TouchableOpacity>
                         )}
                         renderSectionHeader={({ section: { title } }) => (
@@ -83,6 +97,10 @@ export default class App extends Component {
                         ItemSeparatorComponent={() => <View style={{height:1,backgroundColor:'#dfdfdf'}}/>}
                     />
                 </ScrollView>
+                <Color
+                    visible={this.state.visible}
+                    onClose={(color) => this.setState({visible:false,navColor:color})}
+                ></Color>
             </View>
         );
     }

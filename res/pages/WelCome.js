@@ -7,30 +7,22 @@ export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      time: 4
+      time: 3
     }
   }
-  componentWillMount(){
-    const {navigation} = this.props
-    this.Interval = setInterval(() => {
-      this.setState({
-        time: this.state.time - 1
-      })
-      if (this.state.time == 0) {
-        clearInterval(this.Interval)
-        navigation.navigate('TabBar')
-      }
-      //  测试
-      // if (this.state.time) {
-      //   clearInterval(this.Interval)
-      //   navigation.navigate('TabBar')
-      // }
-    },1000)
-  }
   componentDidMount(){
-    this.setState({
-      time: this.state.time - 1
-    })
+    const {navigation} = this.props
+    setTimeout(() => {
+      this.Interval = setInterval(() => {
+        this.setState({
+          time: this.state.time - 1
+        })
+        if (this.state.time == 0) {
+          clearInterval(this.Interval)
+          navigation.navigate('TabBar')
+        }
+      },1000)
+    },300)
   }
   render() {
     return (
