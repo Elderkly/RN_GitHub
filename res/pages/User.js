@@ -14,7 +14,7 @@ export default class App extends Component {
     }
     componentWillMount() {
         AsyncStorage.getItem('diyColor',(error,res) => {
-            if (!error) this.setState({navColor:res})
+            if (!error && res) this.setState({navColor:res})
         })
     }
 

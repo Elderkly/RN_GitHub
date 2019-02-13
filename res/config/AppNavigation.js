@@ -63,20 +63,16 @@ const AppTabBar = createMaterialBottomTabNavigator({
   },
   User: {
     screen: User,
+    // navigationOptions:({navigation,screenProps}) => {
+    //   console.log(screenProps,typeof(screenProps))
+    // }
     navigationOptions: ({navigation,screenProps}) => ({
       tabBarLabel: '我的',
-      tabBarColor:screenProps ? screenProps : 'rgb(208,39,96)',
+      tabBarColor:typeof(screenProps) === 'string' ? screenProps : 'rgb(208,39,96)',
       tabBarIcon: ({ tintColor }) => (
         <Icon name='ios-person' color={tintColor} size={24} />
       )
     }),
-    // navigationOptions: {
-    //   tabBarLabel: '我的',
-    //   tabBarColor:'rgb(208,39,96)',
-    //   tabBarIcon: ({ tintColor }) => (
-    //       <Icon name='ios-person' color={tintColor} size={24} />
-    //   )
-    // }
   }
 },{
   initialRouteName: 'Hot',
