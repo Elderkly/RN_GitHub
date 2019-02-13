@@ -1,7 +1,7 @@
 import {Dimensions, Platform} from "react-native";
 
 /*
-* 判断是否是IphoneX  s
+* 判断是否是IphoneX 
 * */
 export function isIphoneX() {
     const X_WIDTH = 375;
