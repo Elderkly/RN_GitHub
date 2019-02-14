@@ -1,10 +1,12 @@
 
 import React, {Component} from 'react';
-import {View,StyleSheet} from 'react-native';
+import {View,StyleSheet,TouchableOpacity} from 'react-native';
 
 import NavigationBar from '../common/js/NavigationBar'
 
 import {MaterialTopTabNavigator,getPagesData} from '../config/MaterialTopTabNavigator'
+
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import MenuDialog from '../common/js/MenuDialog'
 
