@@ -1,5 +1,14 @@
 import React, {Component} from 'react';
-import {AsyncStorage, FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {
+    AsyncStorage,
+    DeviceEventEmitter,
+    FlatList,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Homenavigation} from './hot'
 
@@ -16,19 +25,27 @@ export default class CollectionHot extends Component {
     //  render之前
     componentWillMount(){
         this.getData()
+        this.listen = DeviceEventEmitter.addListener('loadCollection_flag_key',res => {
+            console.log('热门收藏更新')
+            this.getData()
+        })
     }
 
     render() {
         return (
-            <View>
-                <FlatList
-                    data={this.state.data}  //  数据
-                    extraData={this.state.data}
-                    renderItem={(data) => this.flag_keyLoadRenderDom(data)}  //  渲染模板
-                    refreshing={this.state.isLoading} //  是否显示下拉loading
-                    onRefresh={() => this.upLoad()} //  下拉刷新事件
-                    keyExtractor={(item) => item.node_id } //  items唯一key
-                />
+            <View style={styles.container}>
+                {
+                    this.state.data === '' || this.state.data.length < 1 ?
+                        <Text style={styles.nomessage}>暂无数据</Text> :
+                        <FlatList
+                            data={this.state.data}  //  数据
+                            extraData={this.state.data}
+                            renderItem={(data) => this.flag_keyLoadRenderDom(data)}  //  渲染模板
+                            refreshing={this.state.isLoading} //  是否显示下拉loading
+                            onRefresh={() => this.upLoad()} //  下拉刷新事件
+                            keyExtractor={(item) => item.node_id } //  items唯一key
+                        />
+                }
             </View>
         )
     }
@@ -85,6 +102,7 @@ export default class CollectionHot extends Component {
         const isCollect = data.item.isCollect
 
         CollectDao.setCollection(isCollect,key,data,res => {
+            DeviceEventEmitter.emit('updateCollection_flag_key')
             this.setState({
                 data:res
             })
@@ -113,6 +131,7 @@ export default class CollectionHot extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignItems:'center'
     },
     itemsBox:{
         marginVertical: 5,
@@ -128,5 +147,9 @@ const styles = StyleSheet.create({
         shadowRadius: 1,
         elevation:2,
         borderColor:'#ddd'
+    },
+    nomessage:{
+        fontSize:20,
+        marginTop: 50
     }
 });

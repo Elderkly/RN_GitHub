@@ -31,6 +31,13 @@ const newSeen = (SHOWTYPE,_type) => {
       //  监听从详情页返回刷新状态
       this.listen = DeviceEventEmitter.addListener('detailsGoBack' + _type,res => {
         this.getData()
+        //  派发更新收藏页面事件
+        DeviceEventEmitter.emit('loadCollection_' + SHOWTYPE)
+      })
+      //  收藏页取消收藏刷新数据
+      DeviceEventEmitter.addListener('updateCollection_' + SHOWTYPE,res => {
+        console.log('更新tab页面')
+        this.getData()
       })
     }
     componentWillUnmount(){
@@ -114,13 +121,14 @@ const newSeen = (SHOWTYPE,_type) => {
             }
             this._initData('KeyCollect',type === 'down' && this.state.per_page * this.state.loadIndex > 100 ? newJson : res.items)
 
-            this.setState({
-              // data:type === 'down' && this.state.per_page * this.state.loadIndex > 100 ? newJson : res.items,
-              ShowDownDom:true
-            })
+            // this.setState({
+            //   // data:type === 'down' && this.state.per_page * this.state.loadIndex > 100 ? newJson : res.items,
+            //   ShowDownDom:true
+            // })
             setTimeout(() => {
               this.setState({
-                isLoading:false
+                isLoading:false,
+                ShowDownDom:true
               })
             },300)
           })
@@ -227,6 +235,8 @@ const newSeen = (SHOWTYPE,_type) => {
         this.setState({
           data:this.state.data
         })
+        console.log('派发事件','loadCollection_' + SHOWTYPE)
+        DeviceEventEmitter.emit('loadCollection_' + SHOWTYPE)
       })
     }
     //  初始化数组 根据缓存添加是否收藏字段
