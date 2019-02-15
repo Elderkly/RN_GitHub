@@ -5,7 +5,7 @@
 
 ``` bash
 # 克隆项目
-https://github.com/Elderkly/RN_GitHub.git
+git clone https://github.com/Elderkly/RN_GitHub.git
 
 # 安装依赖
 npm install(or yarn add all)
