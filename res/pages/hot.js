@@ -1,6 +1,6 @@
 
 import React, {Component} from 'react';
-import {View,StyleSheet,TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Linking, Alert} from 'react-native';
 
 import NavigationBar from '../common/js/NavigationBar'
 
@@ -26,7 +26,6 @@ export default class App extends Component{
     super(props)
     this.state = {
       menus:[
-        {name:'分享',icon:'ios-share'},
         {name:'反映',icon:'ios-mail'},
         {name:'关于作者',icon:'ios-contact'},
       ],
@@ -45,16 +44,33 @@ export default class App extends Component{
 
   SelectTab(tab) {
     this.dialog.dismiss()
-    let navigation = null
+    let [navigation,data] = [null,null]
     switch(tab.name) {
       case '关于作者':
-        navigation = 'Hot_SetTab'
+        navigation = 'Hot_details'
+        data = {
+          item:{
+            name: "QZP743",
+            html_url: "https://github.com/Elderkly",
+            flag_language:true,
+            HiddenCollectIcon:true,
+        }}
         break
       case '反映':
-        navigation = 'Hot_sortTab'
         break
     }
-    navigation ? Homenavigation.navigate(navigation) : null
+    if (tab.name === '反映') {
+      const url = 'mailto://897676943@qq.com'
+      Linking.canOpenURL(url).then(supported => {
+        if (!supported) {
+          Alert.alert('提示','请先安装邮箱客户端')
+        } else {
+          return Linking.openURL(url);
+        }
+      }).catch(err => console.error('An error occurred', err));
+      return
+    }
+    navigation ? Homenavigation.navigate(navigation,data ? data : {}) : null
   }
 
   renderMenuDialog() {
